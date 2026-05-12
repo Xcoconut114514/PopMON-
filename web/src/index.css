@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * { box-sizing: border-box; }
+  body {
+    font-family: 'Press Start 2P', cursive;
+    color: #fff;
+    -webkit-font-smoothing: none;
+    image-rendering: pixelated;
+  }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: #0f0e17; }
+  ::-webkit-scrollbar-thumb { background: #836EF9; }
+}
+
+@layer utilities {
+  .pixelated { image-rendering: pixelated; }
+  .text-shadow-pixel { text-shadow: 3px 3px 0 #000; }
+  .rarity-common    { @apply border-rarity-common shadow-[0_0_8px_rgba(156,163,175,0.4)]; }
+  .rarity-uncommon  { @apply border-rarity-uncommon shadow-[0_0_8px_rgba(74,222,128,0.4)]; }
+  .rarity-rare      { @apply border-rarity-rare shadow-[0_0_10px_rgba(96,165,250,0.5)]; }
+  .rarity-epic      { @apply border-rarity-epic shadow-[0_0_12px_rgba(168,85,247,0.6)]; }
+  .rarity-legendary { @apply border-rarity-legendary shadow-neon-gold; }
+}
