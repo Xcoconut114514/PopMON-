@@ -35,10 +35,15 @@
   0%, 100% { opacity: 0.6; filter: brightness(1); }
   50%       { opacity: 1;   filter: brightness(2); }
 }
+@keyframes splashPulse {
+  0%, 100% { opacity: 0.2; }
+  50%       { opacity: 0.5; }
+}
 
 @layer utilities {
   .pixelated { image-rendering: pixelated; }
   .text-shadow-pixel { text-shadow: 3px 3px 0 #000; }
+  .animate-splashPulse { animation: splashPulse 2s ease-in-out infinite; }
   .rarity-common    { @apply border-rarity-common shadow-[0_0_8px_rgba(156,163,175,0.4)]; }
   .rarity-uncommon  { @apply border-rarity-uncommon shadow-[0_0_8px_rgba(74,222,128,0.4)]; }
   .rarity-rare      { @apply border-rarity-rare shadow-[0_0_10px_rgba(96,165,250,0.5)]; }
