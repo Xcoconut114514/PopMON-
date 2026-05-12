@@ -6,3 +6,5 @@ contracts/artifacts/
 contracts/cache/
 contracts/typechain-types/
 contracts/node_modules/
+web/.vite/
+web/node_modules/
