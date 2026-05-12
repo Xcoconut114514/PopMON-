@@ -8,7 +8,7 @@ import { CardRevealModal } from '../components/CardRevealModal'
 import { RarityBadge } from '../components/RarityBadge'
 import { useLang } from '../i18n'
 
-type Phase = 'select' | 'buying' | 'scratch' | 'reveal' | 'selling'
+type Phase = 'select' | 'buying' | 'scratch' | 'video' | 'reveal' | 'selling'
 
 interface CardData {
   id: bigint
@@ -107,15 +107,15 @@ export const OpenPackPage: React.FC<Props> = ({ poolId, onBack }) => {
     }
   }, [address, poolInfo, poolId, writeContractAsync, client])
 
-  // ── Scratch complete → show card ───────────────────────────────────────────
+  // ── Scratch complete → play video → show card ─────────────────────────────
   const handleScratchDone = useCallback(() => {
-    if (cardData) setPhase('reveal')
+    if (cardData) setPhase('video')
     else setScratchDone(true)
   }, [cardData])
 
   // If scratch finished before tx confirmed, auto-reveal once cardData arrives
   useEffect(() => {
-    if (scratchDone && cardData) setPhase('reveal')
+    if (scratchDone && cardData) setPhase('video')
   }, [scratchDone, cardData])
 
   // ── Sell card ───────────────────────────────────────────────────────────────
@@ -150,6 +150,20 @@ export const OpenPackPage: React.FC<Props> = ({ poolId, onBack }) => {
   // ══════════════════════════════════════════════════════════════════════════════
   // Render
   // ══════════════════════════════════════════════════════════════════════════════
+
+  if (phase === 'video') {
+    return (
+      <div className="fixed inset-0 z-50 bg-black flex items-center justify-center">
+        <video
+          src="/openCard.mp4"
+          autoPlay
+          playsInline
+          className="w-full h-full object-cover"
+          onEnded={() => setPhase('reveal')}
+        />
+      </div>
+    )
+  }
 
   if (phase === 'reveal' && cardData && mintedTokenId !== null) {
     return (
