@@ -155,7 +155,7 @@ export const HomePage: React.FC<Props> = ({ onSelectPool }) => {
           alt=""
           aria-hidden
           className="absolute inset-0 w-full h-full object-cover"
-          style={{ objectPosition: 'center 55%', transform: 'scale(1.2)', transformOrigin: 'center' }}
+          style={{ objectPosition: 'center 55%', transform: 'scale(1.2)', transformOrigin: 'center', animation: 'bgPulse 4s ease-in-out infinite' }}
         />
         {/* Top/bottom fade */}
         <div className="absolute inset-0 bg-gradient-to-b from-monad-bg via-transparent to-monad-bg pointer-events-none" />

@@ -31,6 +31,10 @@
   from { transform: rotate(0deg); }
   to   { transform: rotate(360deg); }
 }
+@keyframes bgPulse {
+  0%, 100% { opacity: 0.5; }
+  50%       { opacity: 1; }
+}
 
 @layer utilities {
   .pixelated { image-rendering: pixelated; }
