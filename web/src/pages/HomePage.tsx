@@ -5,7 +5,6 @@ import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { CONTRACTS } from '../config'
 import { GACHA_POOL_ABI } from '../abis'
 import { PoolInfoModal } from '../components/PoolInfoModal'
-import { LivePullsFeed } from '../components/LivePullsFeed'
 import { useLang } from '../i18n'
 
 // Pool artwork configs (placeholder until real assets provided)
@@ -67,8 +66,9 @@ export const HomePage: React.FC<Props> = ({ onSelectPool }) => {
             className="w-10 h-10 object-contain"
           />
           <div>
-            <h1 className="text-sm text-white text-shadow-pixel leading-none">
-              {t.brandName} <span className="text-monad-purple text-[9px]">泡姆</span>
+            <h1 className="text-sm text-white text-shadow-pixel leading-none flex items-baseline gap-2">
+              <span>{t.brandName}</span>
+              <span className="text-monad-purple">泡姆</span>
             </h1>
             <p className="text-[7px] text-monad-ice mt-1">{t.brandSub}</p>
           </div>
@@ -112,15 +112,6 @@ export const HomePage: React.FC<Props> = ({ onSelectPool }) => {
             {t.openSource}
           </p>
         </div>
-      </div>
-
-      {/* ── Live Pulls ──────────────────────────────────────────────────────── */}
-      <div className="px-4 md:px-8 py-4">
-        <div className="flex items-center gap-2 mb-2">
-          <div className="w-2 h-2 bg-monad-purple rounded-full animate-pulse" />
-          <span className="text-[8px] text-gray-400">{t.livePulls}</span>
-        </div>
-        <LivePullsFeed />
       </div>
 
       {/* ── Card Packs ──────────────────────────────────────────────────────── */}
