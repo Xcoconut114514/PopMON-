@@ -188,16 +188,23 @@ export const HomePage: React.FC<Props> = ({ onSelectPool }) => {
                 {/* Pack visual */}
                 <div className="flex items-center justify-center py-4 relative">
                   {art.ballImg ? (
-                    <img
-                      src={art.ballImg}
-                      alt="pack"
-                      className="w-24 h-24 pixelated animate-float drop-shadow-[0_0_20px_rgba(245,158,11,0.6)]"
-                      style={{ imageRendering: 'pixelated' }}
+                    <video
+                      src="/ball.mp4"
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      className="w-24 h-24 object-cover animate-float drop-shadow-[0_0_20px_rgba(245,158,11,0.6)]"
                     />
                   ) : (
-                    <div className="w-24 h-24 border-4 border-monad-purple bg-monad-dark flex items-center justify-center animate-float shadow-neon-purple">
-                      <span className="text-3xl">⬡</span>
-                    </div>
+                    <video
+                      src="/grok.mp4"
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      className="w-24 h-24 object-cover animate-float"
+                    />
                   )}
                   {/* Particles */}
                   <div className="absolute top-2 left-8 w-2 h-2 bg-yellow-400 animate-pulse opacity-60" />
