@@ -22,6 +22,14 @@ interface Props {
   isSelling: boolean
 }
 
+const RARITY_FALLBACK = [
+  '/silver.jpg',   // 0 Common
+  '/silver.jpg',   // 1 Uncommon
+  '/gold.jpg',     // 2 Rare
+  '/gold.jpg',     // 3 Epic
+  '/diamond.jpg',  // 4 Legendary
+]
+
 const RARITY_GLOWS = [
   '',
   'drop-shadow-[0_0_8px_rgba(74,222,128,0.6)]',
@@ -75,13 +83,9 @@ export const CardRevealModal: React.FC<Props> = ({
         {/* Card image */}
         <div className="relative bg-gray-800 overflow-hidden" style={{ height: 200 }}>
           <img
-            src={card.tokenURIBase}
+            src={RARITY_FALLBACK[card.rarity] ?? '/silver.jpg'}
             alt={card.name}
             className={`w-full h-full object-contain pixelated ${glowClass}`}
-            onError={(e) => {
-              ;(e.target as HTMLImageElement).src =
-                `https://placehold.co/240x200/0f0e17/836EF9?text=${encodeURIComponent(card.name)}`
-            }}
           />
           {isLegendary && (
             <div className="absolute inset-0 bg-gradient-to-t from-yellow-500/20 to-transparent pointer-events-none" />
