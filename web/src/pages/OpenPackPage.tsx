@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import { formatEther, parseEther } from 'viem'
 import { useReadContract, useWriteContract, useAccount, useWaitForTransactionReceipt, usePublicClient } from 'wagmi'
 import { CONTRACTS, monadTestnet } from '../config'
@@ -36,6 +36,7 @@ export const OpenPackPage: React.FC<Props> = ({ poolId, onBack }) => {
   const [cardData, setCardData] = useState<CardData | null>(null)
   const [error, setError] = useState('')
   const [isSelling, setIsSelling] = useState(false)
+  const [scratchDone, setScratchDone] = useState(false)
 
   // ── Contract reads ──────────────────────────────────────────────────────────
   const { data: poolInfo } = useReadContract({
@@ -109,7 +110,13 @@ export const OpenPackPage: React.FC<Props> = ({ poolId, onBack }) => {
   // ── Scratch complete → show card ───────────────────────────────────────────
   const handleScratchDone = useCallback(() => {
     if (cardData) setPhase('reveal')
+    else setScratchDone(true)
   }, [cardData])
+
+  // If scratch finished before tx confirmed, auto-reveal once cardData arrives
+  useEffect(() => {
+    if (scratchDone && cardData) setPhase('reveal')
+  }, [scratchDone, cardData])
 
   // ── Sell card ───────────────────────────────────────────────────────────────
   const handleSell = useCallback(async () => {
@@ -122,10 +129,9 @@ export const OpenPackPage: React.FC<Props> = ({ poolId, onBack }) => {
         functionName: 'sellCard',
         args: [mintedTokenId],
       })
-      alert('Card sold! MON has been returned to your wallet.')
       onBack()
     } catch (e: any) {
-      alert(e.shortMessage ?? 'Sell failed')
+      setError(e.shortMessage ?? 'Sell failed')
     } finally {
       setIsSelling(false)
     }
@@ -138,6 +144,7 @@ export const OpenPackPage: React.FC<Props> = ({ poolId, onBack }) => {
     setMintedTokenId(null)
     setCardData(null)
     setError('')
+    setScratchDone(false)
   }, [])
 
   // ══════════════════════════════════════════════════════════════════════════════
@@ -185,15 +192,47 @@ export const OpenPackPage: React.FC<Props> = ({ poolId, onBack }) => {
 
         {/* Phase: Select */}
         {phase === 'select' && (
-          <div className="flex flex-col items-center gap-6">
-            <div className="w-48 h-48 border-4 border-monad-purple bg-monad-dark flex items-center justify-center animate-float shadow-neon-purple relative">
-              <span className="text-6xl">📦</span>
-              <div className="absolute -top-2 -right-2 w-4 h-4 bg-monad-purple animate-pulse" />
-              <div className="absolute -bottom-2 -left-2 w-3 h-3 bg-yellow-400 animate-blink" />
+          <div className="flex flex-col items-center gap-6 w-full max-w-sm">
+            {/* Pack visual card */}
+            <div className="relative w-full">
+              {/* Atmosphere glow */}
+              <div className="absolute inset-0 rounded-full blur-3xl opacity-30"
+                style={{ background: 'radial-gradient(circle, #836EF9 0%, transparent 70%)' }} />
+
+              <div className="relative border-2 border-monad-purple bg-gradient-to-b from-[#1a0f3a] to-monad-dark p-8 flex flex-col items-center gap-4"
+                style={{ boxShadow: '0 0 40px rgba(131,110,249,0.35), inset 0 0 30px rgba(131,110,249,0.08)' }}>
+
+                {/* Pack icon */}
+                <div className="relative">
+                  <div className="absolute inset-0 blur-xl" style={{ background: 'radial-gradient(circle, #836EF9, transparent)' }} />
+                  <div className="relative w-28 h-28 border-2 border-monad-purple flex items-center justify-center"
+                    style={{ animation: 'float 3s ease-in-out infinite', background: 'linear-gradient(135deg, #2d1b5e, #1a0f3a)' }}>
+                    <span className="text-6xl select-none">{poolInfo?.name?.toLowerCase().includes('mon') ? '💫' : '🎴'}</span>
+                    <div className="absolute -top-1 -right-1 w-3 h-3 bg-monad-purple" style={{ animation: 'blink 1s step-end infinite' }} />
+                    <div className="absolute -bottom-1 -left-1 w-2 h-2 bg-yellow-400" style={{ animation: 'blink 1.5s step-end infinite' }} />
+                  </div>
+                </div>
+
+                {/* Price display */}
+                {poolInfo && (
+                  <div className="text-center">
+                    <p className="text-3xl font-bold text-white" style={{ textShadow: '0 0 20px rgba(131,110,249,0.8)' }}>
+                      {formatEther(poolInfo.priceWei)}
+                      <span className="text-monad-purple ml-2">MON</span>
+                    </p>
+                  </div>
+                )}
+
+                {/* Monad speed badge */}
+                <div className="flex items-center gap-2 bg-yellow-400/10 border border-yellow-400/40 px-4 py-2">
+                  <span className="text-yellow-400 text-base">⚡</span>
+                  <span className="text-[7px] text-yellow-300 font-pixel">MONAD ≈ 1 SEC CONFIRMATION</span>
+                </div>
+              </div>
             </div>
 
             {error && (
-              <div className="bg-red-900/50 border-2 border-red-500 px-4 py-3 text-[8px] text-red-300 max-w-sm text-center">
+              <div className="bg-red-900/50 border-2 border-red-500 px-4 py-3 text-[8px] text-red-300 w-full text-center">
                 {error}
               </div>
             )}
@@ -201,12 +240,20 @@ export const OpenPackPage: React.FC<Props> = ({ poolId, onBack }) => {
             <button
               onClick={handleBuy}
               disabled={!address}
-              className="px-10 py-5 bg-monad-purple border-4 border-black text-white font-pixel text-[10px] font-bold shadow-pixel hover:bg-[#9481FA] transition-colors active:shadow-pixel-active active:translate-y-1 disabled:opacity-40 disabled:cursor-not-allowed"
+              className="w-full py-5 font-pixel text-[10px] font-bold text-white transition-all active:translate-y-1 disabled:opacity-40 disabled:cursor-not-allowed"
+              style={{
+                background: address
+                  ? 'linear-gradient(135deg, #836EF9, #6B52D9)'
+                  : '#4a4a4a',
+                boxShadow: address ? '0 0 24px rgba(131,110,249,0.6), 0 4px 0 #4a2db0' : 'none',
+              }}
             >
-              {!address ? t.connectWallet : `${t.insert} ${poolInfo ? formatEther(poolInfo.priceWei) : '?'} MON`}
+              {!address
+                ? t.connectWallet
+                : `🪙 ${t.insert} ${poolInfo ? formatEther(poolInfo.priceWei) : '?'} MON`}
             </button>
 
-            <p className="text-[7px] text-gray-500 text-center max-w-xs leading-6">
+            <p className="text-[7px] text-gray-600 text-center max-w-xs leading-5">
               {t.clickToPay}
             </p>
           </div>
@@ -214,10 +261,32 @@ export const OpenPackPage: React.FC<Props> = ({ poolId, onBack }) => {
 
         {/* Phase: Buying */}
         {phase === 'buying' && (
-          <div className="flex flex-col items-center gap-4">
-            <div className="w-16 h-16 border-4 border-monad-purple border-t-transparent rounded-full animate-spin" />
-            <p className="text-[8px] text-monad-purple animate-blink">{t.confirming}</p>
-            <p className="text-[7px] text-gray-500">{t.approveWallet}</p>
+          <div className="flex flex-col items-center gap-6 w-full max-w-sm">
+            <div className="border-2 border-monad-purple p-8 flex flex-col items-center gap-5 w-full"
+              style={{ background: 'linear-gradient(to bottom, #1a0f3a, #0f0e17)' }}>
+              {/* Monad speed visualizer */}
+              <div className="text-center">
+                <p className="text-[8px] text-monad-purple font-pixel" style={{ animation: 'blink 0.8s step-end infinite' }}>MONAD PROCESSING...</p>
+                <p className="text-[7px] text-yellow-400 font-pixel mt-1">⚡ HIGH PERFORMANCE BLOCKCHAIN</p>
+              </div>
+              {/* Animated bars */}
+              <div className="flex items-end gap-1 h-12">
+                {[0.6, 1, 0.75, 0.9, 0.5, 0.8, 0.65].map((h, i) => (
+                  <div
+                    key={i}
+                    className="w-3 rounded-sm"
+                    style={{
+                      height: `${h * 100}%`,
+                      background: 'linear-gradient(to top, #836EF9, #A0C2F9)',
+                      animation: `barPulse ${0.4 + i * 0.1}s ease-in-out infinite alternate`,
+                      animationDelay: `${i * 0.07}s`,
+                    }}
+                  />
+                ))}
+              </div>
+              <div className="w-12 h-12 rounded-full border-4 border-monad-purple border-t-yellow-400 animate-spin" />
+              <p className="text-[8px] text-gray-400 font-pixel">{t.approveWallet}</p>
+            </div>
           </div>
         )}
 

@@ -57,7 +57,7 @@ export const PoolInfoModal: React.FC<Props> = ({ poolId, onClose }) => {
           >
             {CONTRACTS.gachaPool}
           </a>
-          <span className="text-[8px] text-green-400">{t.verified}</span>
+          <span className="text-[8px] text-yellow-400">{t.verified}</span>
         </div>
 
         {/* Info row */}
@@ -100,7 +100,7 @@ export const PoolInfoModal: React.FC<Props> = ({ poolId, onClose }) => {
                           <RarityBadge rarity={card.rarity} />
                         </td>
                         <td className="py-3 text-right text-monad-purple">{rate}%</td>
-                        <td className="py-3 text-right text-green-400">
+                        <td className="py-3 text-right text-yellow-400">
                           {formatEther(card.buybackPriceWei)} MON
                         </td>
                       </tr>

@@ -62,10 +62,9 @@ export const HomePage: React.FC<Props> = ({ onSelectPool }) => {
         <div className="flex items-center gap-3">
           {/* Logo */}
           <img
-            src="/logo.png"
+            src="/logo.svg"
             alt="PopMON Logo"
             className="w-10 h-10 object-contain"
-            style={{ imageRendering: 'pixelated' }}
           />
           <div>
             <h1 className="text-sm text-white text-shadow-pixel leading-none">
@@ -79,7 +78,7 @@ export const HomePage: React.FC<Props> = ({ onSelectPool }) => {
           {reserve !== undefined && (
             <div className="hidden sm:flex flex-col items-end">
               <span className="text-[7px] text-gray-500">{t.reserve}</span>
-              <span className="text-[9px] text-green-400">{Number(formatEther(reserve)).toFixed(2)} MON</span>
+              <span className="text-[9px] text-yellow-400">{Number(formatEther(reserve)).toFixed(2)} MON</span>
             </div>
           )}
           {/* Language toggle */}
@@ -118,7 +117,7 @@ export const HomePage: React.FC<Props> = ({ onSelectPool }) => {
       {/* ── Live Pulls ──────────────────────────────────────────────────────── */}
       <div className="px-4 md:px-8 py-4">
         <div className="flex items-center gap-2 mb-2">
-          <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+          <div className="w-2 h-2 bg-monad-purple rounded-full animate-pulse" />
           <span className="text-[8px] text-gray-400">{t.livePulls}</span>
         </div>
         <LivePullsFeed />
@@ -140,8 +139,8 @@ export const HomePage: React.FC<Props> = ({ onSelectPool }) => {
                     {art.badge}
                   </span>
                   {pool.isActive ? (
-                    <span className="flex items-center gap-1 text-[7px] text-green-400">
-                      <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                    <span className="flex items-center gap-1 text-[7px] text-monad-purple">
+                      <span className="w-2 h-2 bg-monad-purple rounded-full animate-pulse" />
                       {t.active}
                     </span>
                   ) : (

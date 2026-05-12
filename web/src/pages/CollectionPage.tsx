@@ -196,7 +196,7 @@ export const CollectionPage: React.FC<Props> = ({ onBack }) => {
                   <RarityBadge rarity={card.rarity} className="mb-2" />
                   <p className="text-[8px] text-white mb-1">{card.name}</p>
                   <p className="text-[7px] text-gray-500">#{card.tokenId.toString()}</p>
-                  <p className="text-[7px] text-green-400 mt-1">
+                  <p className="text-[7px] text-yellow-400 mt-1">
                     {t.buyback}: {formatEther(card.buybackPriceWei)} MON
                   </p>
                 </div>
@@ -236,7 +236,7 @@ export const CollectionPage: React.FC<Props> = ({ onBack }) => {
                     <button
                       onClick={() => handleSell(card.tokenId)}
                       disabled={isSelling}
-                      className="mt-auto py-2 border-2 border-green-600 text-green-400 text-[6px] hover:bg-green-600 hover:text-black transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                      className="mt-auto py-2 border-2 border-yellow-600 text-yellow-400 text-[6px] hover:bg-yellow-600 hover:text-black transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                     >
                       {isSelling ? t.selling : `${t.sell} ${formatEther(card.buybackPriceWei)} MON`}
                     </button>

@@ -111,7 +111,7 @@ export const CardRevealModal: React.FC<Props> = ({
         <button
           onClick={onSell}
           disabled={isSelling}
-          className="px-6 py-4 border-4 border-black bg-green-500 text-black font-pixel text-[9px] font-bold shadow-pixel hover:bg-green-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="px-6 py-4 border-4 border-black bg-yellow-500 text-black font-pixel text-[9px] font-bold shadow-pixel hover:bg-yellow-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isSelling ? t.selling : `${t.sellFor} ${formatEther(card.buybackPriceWei)} MON`}
         </button>
