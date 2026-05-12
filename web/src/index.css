@@ -32,8 +32,9 @@
   to   { transform: rotate(360deg); }
 }
 @keyframes bgPulse {
-  0%, 100% { opacity: 0.5; }
-  50%       { opacity: 1; }
+  0%, 100% { opacity: 0.6; filter: brightness(1); }
+  50%       { opacity: 1;   filter: brightness(2); }
+}
 }
 
 @layer utilities {
