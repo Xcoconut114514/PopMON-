@@ -51,7 +51,17 @@ export const CardRevealModal: React.FC<Props> = ({
   const { t } = useLang()
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black/90 p-4">
+    <div className="fixed inset-0 z-50 flex flex-col items-center justify-center p-4 overflow-hidden">
+      {/* City background */}
+      <img
+        src="/city-bg.jpg"
+        alt=""
+        aria-hidden
+        className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
+        style={{ objectPosition: 'center bottom', opacity: 0.85 }}
+      />
+      <div className="absolute inset-0 bg-black/65 pointer-events-none" />
+
       {/* Legendary confetti bg */}
       {isLegendary && (
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -72,7 +82,7 @@ export const CardRevealModal: React.FC<Props> = ({
       )}
 
       {/* Card */}
-      <div className={`relative animate-float border-4 ${borderClass} ${glowClass} bg-gray-900 p-2 mb-8`}
+      <div className={`relative z-10 animate-float border-4 ${borderClass} ${glowClass} bg-gray-900 p-2 mb-8`}
         style={{ width: 240, maxWidth: '90vw' }}>
         {/* PSA-style label */}
         <div className="bg-red-700 px-2 py-1 mb-2 flex items-center justify-between">
@@ -105,7 +115,7 @@ export const CardRevealModal: React.FC<Props> = ({
       </div>
 
       {/* Actions */}
-      <div className="flex flex-col sm:flex-row gap-4 items-center">
+      <div className="relative z-10 flex flex-col sm:flex-row gap-4 items-center">
         <button
           onClick={onPullAnother}
           className="px-6 py-4 border-4 border-gray-600 text-gray-300 font-pixel text-[9px] hover:border-white hover:text-white transition-colors shadow-pixel"
@@ -121,7 +131,7 @@ export const CardRevealModal: React.FC<Props> = ({
         </button>
       </div>
 
-      <p className="mt-4 text-[7px] text-gray-600">Token ID #{tokenId.toString()}</p>
+      <p className="relative z-10 mt-4 text-[7px] text-gray-400">Token ID #{tokenId.toString()}</p>
     </div>
   )
 }

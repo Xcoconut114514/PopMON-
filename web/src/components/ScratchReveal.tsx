@@ -255,24 +255,34 @@ export const ScratchReveal: React.FC<Props> = ({ onComplete, isReady }) => {
         className="relative border-2 border-monad-purple shadow-[0_0_30px_rgba(131,110,249,0.4)]"
         style={{ width: W, maxWidth: '92vw' }}
       >
-        {/* Background beneath scratch layer */}
+        {/* Background beneath scratch layer — cyberpunk city */}
         <div
-          className="absolute inset-0 bg-gradient-to-b from-[#1a0f3a] to-monad-dark flex items-center justify-center"
+          className="absolute inset-0 overflow-hidden flex items-center justify-center"
           style={{ zIndex: 0 }}
         >
-          {isReady ? (
-            <div className="text-center px-4">
-              <div className="text-4xl mb-3" style={{ animation: 'spin 3s linear infinite' }}>✦</div>
-              <p className="text-[9px] text-monad-purple font-pixel" style={{ animation: 'blink 1.2s step-end infinite' }}>NFT 已铸造！</p>
-              <p className="text-[7px] text-gray-500 font-pixel mt-2">开始刮卡...</p>
-            </div>
-          ) : (
-            <div className="text-center px-4">
-              <div className="w-10 h-10 border-4 border-monad-purple border-t-yellow-400 rounded-full animate-spin mx-auto mb-3" />
-              <p className="text-[8px] text-gray-400 font-pixel" style={{ animation: 'blink 1.2s step-end infinite' }}>Monad 链上铸造中...</p>
-              <p className="text-[7px] text-yellow-400 font-pixel mt-2 animate-pulse">⚡ ~1 秒确认</p>
-            </div>
-          )}
+          <img
+            src="/city-bg.jpg"
+            alt=""
+            aria-hidden
+            className="absolute inset-0 w-full h-full object-cover select-none pointer-events-none"
+            style={{ objectPosition: 'center bottom', opacity: 0.9 }}
+          />
+          <div className="absolute inset-0 bg-black/30 pointer-events-none" />
+          <div className="relative z-10 text-center px-4">
+            {isReady ? (
+              <>
+                <div className="text-4xl mb-3" style={{ animation: 'spin 3s linear infinite' }}>✦</div>
+                <p className="text-[9px] text-monad-purple font-pixel" style={{ animation: 'blink 1.2s step-end infinite' }}>NFT 已铸造！</p>
+                <p className="text-[7px] text-gray-400 font-pixel mt-2">开始刮卡...</p>
+              </>
+            ) : (
+              <>
+                <div className="w-10 h-10 border-4 border-monad-purple border-t-yellow-400 rounded-full animate-spin mx-auto mb-3" />
+                <p className="text-[8px] text-gray-300 font-pixel" style={{ animation: 'blink 1.2s step-end infinite' }}>Monad 链上铸造中...</p>
+                <p className="text-[7px] text-yellow-400 font-pixel mt-2 animate-pulse">⚡ ~1 秒确认</p>
+              </>
+            )}
+          </div>
         </div>
 
         {/* Holographic scratch canvas */}
