@@ -41,7 +41,6 @@ export const HomePage: React.FC<Props> = ({ onSelectPool }) => {
   const { isConnected } = useAccount()
   const [infoPoolId, setInfoPoolId] = useState<bigint | null>(null)
   const { t, lang, toggleLang } = useLang()
-  const [splashVisible, setSplashVisible] = useState(true)
   const [muted, setMuted] = useState(true)
   const audioRef = useRef<HTMLAudioElement>(null)
 
@@ -79,20 +78,6 @@ export const HomePage: React.FC<Props> = ({ onSelectPool }) => {
 
   return (
     <div className="min-h-screen bg-monad-bg bg-grid-pattern flex flex-col font-pixel">
-      {/* ── Splash overlay ───────────────────────────────────────────── */}
-      {splashVisible && (
-        <div
-          className="fixed inset-0 z-[100] cursor-pointer"
-          onClick={() => setSplashVisible(false)}
-        >
-          <img
-            src="/gacha-bg2.png"
-            alt=""
-            aria-hidden
-            className="w-full h-full object-cover animate-splashPulse"
-          />
-        </div>
-      )}
       {/* BGM */}
       <audio ref={audioRef} src="/bgm.mp3" loop muted />
 
