@@ -6,6 +6,7 @@ import { GACHA_POOL_ABI } from '../abis'
 import { ScratchReveal } from '../components/ScratchReveal'
 import { CardRevealModal } from '../components/CardRevealModal'
 import { RarityBadge } from '../components/RarityBadge'
+import { useLang } from '../i18n'
 
 type Phase = 'select' | 'buying' | 'scratch' | 'reveal' | 'selling'
 
@@ -27,6 +28,7 @@ interface Props {
 export const OpenPackPage: React.FC<Props> = ({ poolId, onBack }) => {
   const { address } = useAccount()
   const client = usePublicClient({ chainId: monadTestnet.id })
+  const { t } = useLang()
 
   const [phase, setPhase] = useState<Phase>('select')
   const [txHash, setTxHash] = useState<`0x${string}` | undefined>()
@@ -162,9 +164,9 @@ export const OpenPackPage: React.FC<Props> = ({ poolId, onBack }) => {
           onClick={onBack}
           className="text-[8px] text-gray-400 hover:text-white border-2 border-gray-600 hover:border-white px-3 py-2 transition-colors"
         >
-          ← BACK
+          {t.back}
         </button>
-        <h1 className="text-[10px] text-monad-purple">OPEN PACK</h1>
+        <h1 className="text-[10px] text-monad-purple">{t.openPackTitle}</h1>
         <div className="w-20" />
       </div>
 
@@ -173,10 +175,10 @@ export const OpenPackPage: React.FC<Props> = ({ poolId, onBack }) => {
         {/* Pool info card */}
         {poolInfo && (
           <div className="bg-gray-900 border-4 border-gray-700 px-8 py-4 text-center">
-            <p className="text-[8px] text-gray-400">CURRENT POOL</p>
+            <p className="text-[8px] text-gray-400">{t.currentPool}</p>
             <p className="text-sm text-white mt-1">{poolInfo.name}</p>
             <p className="text-[8px] text-monad-purple mt-2">
-              PRICE: {formatEther(poolInfo.priceWei)} MON
+              {t.price}: {formatEther(poolInfo.priceWei)} MON
             </p>
           </div>
         )}
@@ -201,11 +203,11 @@ export const OpenPackPage: React.FC<Props> = ({ poolId, onBack }) => {
               disabled={!address}
               className="px-10 py-5 bg-monad-purple border-4 border-black text-white font-pixel text-[10px] font-bold shadow-pixel hover:bg-[#9481FA] transition-colors active:shadow-pixel-active active:translate-y-1 disabled:opacity-40 disabled:cursor-not-allowed"
             >
-              {!address ? 'CONNECT WALLET' : `INSERT ${poolInfo ? formatEther(poolInfo.priceWei) : '?'} MON`}
+              {!address ? t.connectWallet : `${t.insert} ${poolInfo ? formatEther(poolInfo.priceWei) : '?'} MON`}
             </button>
 
             <p className="text-[7px] text-gray-500 text-center max-w-xs leading-6">
-              Click to pay and open one pack. You'll scratch the card to reveal your NFT.
+              {t.clickToPay}
             </p>
           </div>
         )}
@@ -214,15 +216,15 @@ export const OpenPackPage: React.FC<Props> = ({ poolId, onBack }) => {
         {phase === 'buying' && (
           <div className="flex flex-col items-center gap-4">
             <div className="w-16 h-16 border-4 border-monad-purple border-t-transparent rounded-full animate-spin" />
-            <p className="text-[8px] text-monad-purple animate-blink">CONFIRMING TRANSACTION...</p>
-            <p className="text-[7px] text-gray-500">Please approve in your wallet</p>
+            <p className="text-[8px] text-monad-purple animate-blink">{t.confirming}</p>
+            <p className="text-[7px] text-gray-500">{t.approveWallet}</p>
           </div>
         )}
 
         {/* Phase: Scratch */}
         {phase === 'scratch' && (
           <div className="flex flex-col items-center gap-6">
-            <p className="text-[9px] text-monad-ice text-center">YOUR CARD IS READY TO REVEAL!</p>
+            <p className="text-[9px] text-monad-ice text-center">{t.scratchReveal}</p>
             <ScratchReveal
               onComplete={handleScratchDone}
               isReady={cardData !== null}

@@ -6,6 +6,7 @@ import { CONTRACTS } from '../config'
 import { GACHA_POOL_ABI } from '../abis'
 import { PoolInfoModal } from '../components/PoolInfoModal'
 import { LivePullsFeed } from '../components/LivePullsFeed'
+import { useLang } from '../i18n'
 
 // Pool artwork configs (placeholder until real assets provided)
 const POOL_ART = [
@@ -40,6 +41,7 @@ interface Props {
 export const HomePage: React.FC<Props> = ({ onSelectPool }) => {
   const { isConnected } = useAccount()
   const [infoPoolId, setInfoPoolId] = useState<bigint | null>(null)
+  const { t, lang, toggleLang } = useLang()
 
   const { data: pools } = useReadContract({
     address: CONTRACTS.gachaPool,
@@ -59,22 +61,34 @@ export const HomePage: React.FC<Props> = ({ onSelectPool }) => {
       <header className="flex items-center justify-between px-6 py-4 border-b-4 border-gray-800 bg-black/60 backdrop-blur">
         <div className="flex items-center gap-3">
           {/* Logo */}
-          <div className="w-10 h-10 border-4 border-monad-purple bg-monad-dark flex items-center justify-center shadow-neon">
-            <span className="text-monad-purple text-sm">M</span>
-          </div>
+          <img
+            src="/logo.png"
+            alt="PopMON Logo"
+            className="w-10 h-10 object-contain"
+            style={{ imageRendering: 'pixelated' }}
+          />
           <div>
-            <h1 className="text-sm text-white text-shadow-pixel leading-none">MON GACHA</h1>
-            <p className="text-[7px] text-monad-ice mt-1">MONAD TESTNET · CHAIN 10143</p>
+            <h1 className="text-sm text-white text-shadow-pixel leading-none">
+              {t.brandName} <span className="text-monad-purple text-[9px]">泡姆</span>
+            </h1>
+            <p className="text-[7px] text-monad-ice mt-1">{t.brandSub}</p>
           </div>
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
           {reserve !== undefined && (
             <div className="hidden sm:flex flex-col items-end">
-              <span className="text-[7px] text-gray-500">RESERVE</span>
+              <span className="text-[7px] text-gray-500">{t.reserve}</span>
               <span className="text-[9px] text-green-400">{Number(formatEther(reserve)).toFixed(2)} MON</span>
             </div>
           )}
+          {/* Language toggle */}
+          <button
+            onClick={toggleLang}
+            className="border-2 border-monad-purple text-monad-purple text-[8px] px-2 py-1 hover:bg-monad-purple hover:text-white transition-colors font-pixel"
+          >
+            {lang === 'en' ? '中文' : 'EN'}
+          </button>
           <ConnectButton
             showBalance={false}
             chainStatus="icon"
@@ -87,16 +101,16 @@ export const HomePage: React.FC<Props> = ({ onSelectPool }) => {
       <div className="text-center pt-12 pb-6 px-4">
         <div className="inline-block relative">
           <h2 className="text-2xl md:text-4xl text-transparent bg-clip-text bg-gradient-to-r from-monad-ice via-monad-purple to-yellow-400 drop-shadow-[4px_4px_0_rgba(0,0,0,1)]">
-            GACHA MACHINE
+            {t.hero}
           </h2>
           <div className="absolute -top-2 -right-4 w-4 h-4 bg-yellow-400 animate-blink" />
         </div>
         <p className="text-[9px] text-gray-400 mt-4 leading-6">
-          PAY MON · PULL CARDS · OWN YOUR NFT ON MONAD TESTNET
+          {t.tagline}
         </p>
         <div className="inline-block bg-black px-4 py-2 border-2 border-arcade-red mt-3">
           <p className="text-[8px] text-arcade-red animate-blink">
-            ◆ ALL RATES ARE ON-CHAIN & OPEN SOURCE ◆
+            {t.openSource}
           </p>
         </div>
       </div>
@@ -105,7 +119,7 @@ export const HomePage: React.FC<Props> = ({ onSelectPool }) => {
       <div className="px-4 md:px-8 py-4">
         <div className="flex items-center gap-2 mb-2">
           <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-          <span className="text-[8px] text-gray-400">LIVE PULLS</span>
+          <span className="text-[8px] text-gray-400">{t.livePulls}</span>
         </div>
         <LivePullsFeed />
       </div>
@@ -128,10 +142,10 @@ export const HomePage: React.FC<Props> = ({ onSelectPool }) => {
                   {pool.isActive ? (
                     <span className="flex items-center gap-1 text-[7px] text-green-400">
                       <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                      ACTIVE
+                      {t.active}
                     </span>
                   ) : (
-                    <span className="text-[7px] text-red-400">INACTIVE</span>
+                    <span className="text-[7px] text-red-400">{t.inactive}</span>
                   )}
                 </div>
 
@@ -158,13 +172,13 @@ export const HomePage: React.FC<Props> = ({ onSelectPool }) => {
                 <div className="text-center">
                   <h3 className={`text-sm ${art.accent}`}>{pool.name}</h3>
                   <p className="text-[8px] text-gray-400 mt-1">
-                    {pool.cardCount.toString()} card types
+                    {pool.cardCount.toString()} {t.cardTypes}
                   </p>
                 </div>
 
                 {/* Price */}
                 <div className="bg-black/60 border-2 border-gray-700 px-4 py-3 flex items-center justify-between">
-                  <span className="text-[8px] text-gray-400">PRICE PER PULL</span>
+                  <span className="text-[8px] text-gray-400">{t.pricePerPull}</span>
                   <span className={`text-sm font-bold ${art.accent}`}>
                     {formatEther(pool.priceWei)} MON
                   </span>
@@ -176,7 +190,7 @@ export const HomePage: React.FC<Props> = ({ onSelectPool }) => {
                     onClick={() => setInfoPoolId(pool.id)}
                     className="flex-1 py-3 border-4 border-gray-600 text-gray-300 text-[8px] hover:border-monad-ice hover:text-monad-ice transition-colors shadow-pixel"
                   >
-                    VIEW POOL INFO
+                    {t.viewPoolInfo}
                   </button>
                   <button
                     onClick={() => isConnected && pool.isActive && onSelectPool(pool.id)}
@@ -185,7 +199,7 @@ export const HomePage: React.FC<Props> = ({ onSelectPool }) => {
                       idx === 0 ? 'bg-yellow-400 hover:bg-yellow-300' : 'bg-monad-purple text-white hover:bg-[#9481FA]'
                     }`}
                   >
-                    {!isConnected ? 'CONNECT WALLET' : 'OPEN PACK'}
+                    {!isConnected ? t.connectWallet : t.openPack}
                   </button>
                 </div>
               </div>
@@ -211,6 +225,7 @@ export const HomePage: React.FC<Props> = ({ onSelectPool }) => {
       {/* ── Footer ──────────────────────────────────────────────────────────── */}
       <footer className="text-center py-6 border-t-4 border-gray-800 px-4">
         <p className="text-[7px] text-gray-600">POWERED BY MONAD TESTNET · SMART CONTRACT OPEN SOURCE</p>
+        <p className="text-[7px] text-monad-purple mt-1">PopMON 泡姆 © 2025</p>
         <div className="flex items-center justify-center gap-4 mt-2 flex-wrap">
           <a
             href={`https://testnet.monadexplorer.com/address/${CONTRACTS.gachaPool}`}

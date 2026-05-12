@@ -4,6 +4,7 @@ import { formatEther } from 'viem'
 import { CONTRACTS, monadTestnet } from '../config'
 import { GACHA_POOL_ABI } from '../abis'
 import { RarityBadge } from './RarityBadge'
+import { useLang } from '../i18n'
 
 interface PullEvent {
   buyer: string
@@ -20,6 +21,7 @@ const POOL_NAMES = ['Pokemon', 'Monad Genesis']
 export const LivePullsFeed: React.FC = () => {
   const client = usePublicClient({ chainId: monadTestnet.id })
   const [pulls, setPulls] = useState<PullEvent[]>([])
+  const { t } = useLang()
 
   useEffect(() => {
     if (!client) return
@@ -80,7 +82,7 @@ export const LivePullsFeed: React.FC = () => {
     return (
       <div className="flex items-center gap-3 py-2 text-[8px] text-gray-600">
         <span className="animate-blink">◆</span>
-        <span>No recent pulls yet. Be the first!</span>
+        <span>{t.noPulls}</span>
       </div>
     )
   }

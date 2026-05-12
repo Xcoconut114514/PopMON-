@@ -4,6 +4,7 @@ import { useAccount, useWriteContract, usePublicClient } from 'wagmi'
 import { CONTRACTS, monadTestnet, RARITY_BORDER } from '../config'
 import { GACHA_POOL_ABI, GACHA_CARD_ABI } from '../abis'
 import { RarityBadge } from '../components/RarityBadge'
+import { useLang } from '../i18n'
 
 interface OwnedCard {
   tokenId: bigint
@@ -24,6 +25,7 @@ export const CollectionPage: React.FC<Props> = ({ onBack }) => {
   const { address } = useAccount()
   const client = usePublicClient({ chainId: monadTestnet.id })
   const { writeContractAsync } = useWriteContract()
+  const { t } = useLang()
 
   const [cards, setCards] = useState<OwnedCard[]>([])
   const [isLoading, setIsLoading] = useState(false)
@@ -123,9 +125,9 @@ export const CollectionPage: React.FC<Props> = ({ onBack }) => {
         args: [tokenId],
       })
       setCards((prev) => prev.filter((c) => c.tokenId !== tokenId))
-      alert('Card sold successfully!')
+      alert(t.selling + ' OK')
     } catch (e: any) {
-      alert(e.shortMessage ?? 'Sell failed')
+      alert(e.shortMessage ?? t.sell + ' failed')
     } finally {
       setSellingId(null)
     }
@@ -142,30 +144,30 @@ export const CollectionPage: React.FC<Props> = ({ onBack }) => {
           onClick={onBack}
           className="text-[8px] text-gray-400 hover:text-white border-2 border-gray-600 hover:border-white px-3 py-2 transition-colors"
         >
-          ← BACK
+          {t.back}
         </button>
-        <h1 className="text-[10px] text-monad-purple">MY COLLECTION</h1>
+        <h1 className="text-[10px] text-monad-purple">{t.myCollection}</h1>
         <div className="w-20" />
       </div>
 
       <div className="max-w-5xl mx-auto px-4 py-8">
         {!address && (
           <p className="text-[8px] text-gray-400 text-center py-16 animate-blink">
-            CONNECT WALLET TO VIEW YOUR COLLECTION
+            {t.noWallet}
           </p>
         )}
 
         {address && isLoading && (
           <div className="flex flex-col items-center py-16 gap-4">
             <div className="w-10 h-10 border-4 border-monad-purple border-t-transparent rounded-full animate-spin" />
-            <p className="text-[8px] text-gray-400 animate-blink">LOADING YOUR CARDS...</p>
+            <p className="text-[8px] text-gray-400 animate-blink">{t.loading}</p>
           </div>
         )}
 
         {address && !isLoading && cards.length === 0 && (
           <div className="text-center py-16">
-            <p className="text-3xl mb-4">📭</p>
-            <p className="text-[8px] text-gray-400">NO CARDS YET. OPEN SOME PACKS!</p>
+            <p className="text-3xl mb-4">💭</p>
+            <p className="text-[8px] text-gray-400">{t.noCards}</p>
           </div>
         )}
 
@@ -174,7 +176,7 @@ export const CollectionPage: React.FC<Props> = ({ onBack }) => {
           <div className="mb-8">
             <div className="flex items-center gap-2 mb-4">
               <span className="text-yellow-400">🏆</span>
-              <h2 className="text-[9px] text-yellow-400">MY BEST PULLS</h2>
+              <h2 className="text-[9px] text-yellow-400">{t.myBestPulls}</h2>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               {bestPulls.map((card) => (
@@ -195,7 +197,7 @@ export const CollectionPage: React.FC<Props> = ({ onBack }) => {
                   <p className="text-[8px] text-white mb-1">{card.name}</p>
                   <p className="text-[7px] text-gray-500">#{card.tokenId.toString()}</p>
                   <p className="text-[7px] text-green-400 mt-1">
-                    Buyback: {formatEther(card.buybackPriceWei)} MON
+                    {t.buyback}: {formatEther(card.buybackPriceWei)} MON
                   </p>
                 </div>
               ))}
@@ -208,8 +210,8 @@ export const CollectionPage: React.FC<Props> = ({ onBack }) => {
           <div>
             <div className="flex items-center gap-2 mb-4">
               <span className="text-monad-purple">🃏</span>
-              <h2 className="text-[9px] text-monad-purple">ALL MY PULLS</h2>
-              <span className="text-[7px] text-gray-500">({cards.length} cards)</span>
+              <h2 className="text-[9px] text-monad-purple">{t.allMyPulls}</h2>
+              <span className="text-[7px] text-gray-500">({cards.length} {t.cards})</span>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
               {cards.map((card) => {
@@ -236,7 +238,7 @@ export const CollectionPage: React.FC<Props> = ({ onBack }) => {
                       disabled={isSelling}
                       className="mt-auto py-2 border-2 border-green-600 text-green-400 text-[6px] hover:bg-green-600 hover:text-black transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                     >
-                      {isSelling ? 'SELLING...' : `SELL ${formatEther(card.buybackPriceWei)} MON`}
+                      {isSelling ? t.selling : `${t.sell} ${formatEther(card.buybackPriceWei)} MON`}
                     </button>
                   </div>
                 )

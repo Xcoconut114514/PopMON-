@@ -4,6 +4,7 @@ import { useReadContract } from 'wagmi'
 import { CONTRACTS } from '../config'
 import { GACHA_POOL_ABI } from '../abis'
 import { RarityBadge } from './RarityBadge'
+import { useLang } from '../i18n'
 
 interface Props {
   poolId: bigint
@@ -25,6 +26,7 @@ export const PoolInfoModal: React.FC<Props> = ({ poolId, onClose }) => {
     args: [poolId],
   })
 
+  const { t } = useLang()
   const totalWeight = cards?.reduce((acc, c) => acc + Number(c.weight), 0) ?? 10000
 
   return (
@@ -33,7 +35,7 @@ export const PoolInfoModal: React.FC<Props> = ({ poolId, onClose }) => {
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 bg-monad-dark border-b-4 border-monad-purple">
           <div>
-            <h2 className="text-[10px] text-monad-purple font-pixel">OPEN SOURCE CARD POOL</h2>
+            <h2 className="text-[10px] text-monad-purple font-pixel">{t.poolInfoTitle}</h2>
             <p className="text-xs text-white mt-1">{info?.name ?? '...'}</p>
           </div>
           <button
@@ -46,7 +48,7 @@ export const PoolInfoModal: React.FC<Props> = ({ poolId, onClose }) => {
 
         {/* Contract link */}
         <div className="px-6 py-3 bg-gray-800 border-b-2 border-gray-700 flex items-center gap-3 flex-wrap">
-          <span className="text-[8px] text-gray-400">CONTRACT:</span>
+          <span className="text-[8px] text-gray-400">{t.contract}:</span>
           <a
             href={`https://testnet.monadexplorer.com/address/${CONTRACTS.gachaPool}`}
             target="_blank"
@@ -55,37 +57,37 @@ export const PoolInfoModal: React.FC<Props> = ({ poolId, onClose }) => {
           >
             {CONTRACTS.gachaPool}
           </a>
-          <span className="text-[8px] text-green-400">✓ VERIFIED OPEN SOURCE</span>
+          <span className="text-[8px] text-green-400">{t.verified}</span>
         </div>
 
         {/* Info row */}
         <div className="px-6 py-4 grid grid-cols-2 gap-4 border-b-2 border-gray-700">
           <div>
-            <p className="text-[8px] text-gray-400">PACK PRICE</p>
+            <p className="text-[8px] text-gray-400">{t.packPrice}</p>
             <p className="text-sm text-monad-purple mt-1">
               {info ? formatEther(info.priceWei) : '—'} MON
             </p>
           </div>
           <div>
-            <p className="text-[8px] text-gray-400">RANDOM METHOD</p>
+            <p className="text-[8px] text-gray-400">{t.randomMethod}</p>
             <p className="text-[8px] text-white mt-1">keccak256(prevrandao+nonce)</p>
           </div>
         </div>
 
         {/* Cards table */}
         <div className="px-6 py-4">
-          <p className="text-[8px] text-monad-ice mb-3">CARD POOL — ALL WEIGHTS ARE ON-CHAIN</p>
+          <p className="text-[8px] text-monad-ice mb-3">{t.cardPool}</p>
           {isLoading ? (
-            <p className="text-[8px] text-gray-400 animate-blink">LOADING...</p>
+            <p className="text-[8px] text-gray-400 animate-blink">{t.loading}...</p>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-[8px]">
                 <thead>
                   <tr className="border-b-2 border-gray-700">
-                    <th className="text-left py-2 text-gray-400">CARD</th>
-                    <th className="text-center py-2 text-gray-400">RARITY</th>
-                    <th className="text-right py-2 text-gray-400">RATE</th>
-                    <th className="text-right py-2 text-gray-400">BUYBACK</th>
+                    <th className="text-left py-2 text-gray-400">{t.cardCol}</th>
+                    <th className="text-center py-2 text-gray-400">{t.rarityCol}</th>
+                    <th className="text-right py-2 text-gray-400">{t.rateCol}</th>
+                    <th className="text-right py-2 text-gray-400">{t.buybackCol}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -113,8 +115,7 @@ export const PoolInfoModal: React.FC<Props> = ({ poolId, onClose }) => {
         {/* Disclaimer */}
         <div className="px-6 py-4 bg-gray-800/50 border-t-2 border-gray-700">
           <p className="text-[7px] text-gray-500 leading-5">
-            ⚠ All rates are enforced on-chain. The smart contract source is publicly verifiable on Monad Explorer.
-            Randomness uses block.prevrandao — suitable for testnet. Upgrade to VRF for mainnet.
+            {t.disclaimer}
           </p>
         </div>
       </div>

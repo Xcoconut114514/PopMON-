@@ -6,6 +6,7 @@ import { RainbowKitProvider, darkTheme } from '@rainbow-me/rainbowkit'
 import '@rainbow-me/rainbowkit/styles.css'
 import './index.css'
 import { wagmiConfig } from './config'
+import { LangProvider, useLang } from './i18n'
 import { HomePage } from './pages/HomePage'
 import { OpenPackPage } from './pages/OpenPackPage'
 import { CollectionPage } from './pages/CollectionPage'
@@ -17,6 +18,7 @@ type Page = 'home' | 'openPack' | 'collection'
 const App: React.FC = () => {
   const [page, setPage] = useState<Page>('home')
   const [selectedPoolId, setSelectedPoolId] = useState<bigint>(0n)
+  const { t } = useLang()
 
   const handleSelectPool = (poolId: bigint) => {
     setSelectedPoolId(poolId)
@@ -41,7 +43,7 @@ const App: React.FC = () => {
           onClick={() => setPage('collection')}
           className="fixed bottom-6 right-6 bg-monad-dark border-4 border-monad-purple px-4 py-3 text-[8px] text-monad-purple shadow-neon-purple hover:bg-monad-purple hover:text-white transition-colors font-pixel z-40"
         >
-          MY CARDS 🃏
+          {t.myCards}
         </button>
       )}
     </>
@@ -60,7 +62,9 @@ createRoot(container).render(
           fontStack: 'system',
         })}
       >
-        <App />
+        <LangProvider>
+          <App />
+        </LangProvider>
       </RainbowKitProvider>
     </QueryClientProvider>
   </WagmiProvider>

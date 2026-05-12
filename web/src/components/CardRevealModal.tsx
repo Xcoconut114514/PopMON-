@@ -2,6 +2,7 @@ import React from 'react'
 import { formatEther } from 'viem'
 import { RarityBadge } from './RarityBadge'
 import { RARITY_BORDER } from '../config'
+import { useLang } from '../i18n'
 
 interface CardData {
   id: bigint
@@ -39,6 +40,7 @@ export const CardRevealModal: React.FC<Props> = ({
   const borderClass = RARITY_BORDER[card.rarity] ?? 'rarity-common'
   const glowClass = RARITY_GLOWS[card.rarity] ?? ''
   const isLegendary = card.rarity === 4
+  const { t } = useLang()
 
   return (
     <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black/90 p-4">
@@ -66,7 +68,7 @@ export const CardRevealModal: React.FC<Props> = ({
         style={{ width: 240, maxWidth: '90vw' }}>
         {/* PSA-style label */}
         <div className="bg-red-700 px-2 py-1 mb-2 flex items-center justify-between">
-          <span className="text-[6px] text-white">PSA · MON GACHA TESTNET</span>
+          <span className="text-[6px] text-white">{t.psaLabel}</span>
           <span className="text-[6px] text-yellow-300">#{tokenId.toString()}</span>
         </div>
 
@@ -92,7 +94,7 @@ export const CardRevealModal: React.FC<Props> = ({
           <div className="flex items-center justify-between mt-1">
             <RarityBadge rarity={card.rarity} />
             <span className="text-[7px] text-gray-400">
-              {((Number(card.weight) / 10000) * 100).toFixed(1)}% rate
+              {((Number(card.weight) / 10000) * 100).toFixed(1)}% {t.rateLabel}
             </span>
           </div>
         </div>
@@ -104,14 +106,14 @@ export const CardRevealModal: React.FC<Props> = ({
           onClick={onPullAnother}
           className="px-6 py-4 border-4 border-gray-600 text-gray-300 font-pixel text-[9px] hover:border-white hover:text-white transition-colors shadow-pixel"
         >
-          PULL ANOTHER
+          {t.pullAnother}
         </button>
         <button
           onClick={onSell}
           disabled={isSelling}
           className="px-6 py-4 border-4 border-black bg-green-500 text-black font-pixel text-[9px] font-bold shadow-pixel hover:bg-green-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {isSelling ? 'SELLING...' : `SELL FOR ${formatEther(card.buybackPriceWei)} MON`}
+          {isSelling ? t.selling : `${t.sellFor} ${formatEther(card.buybackPriceWei)} MON`}
         </button>
       </div>
 
