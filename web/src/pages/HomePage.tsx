@@ -134,7 +134,7 @@ export const HomePage: React.FC<Props> = ({ onSelectPool }) => {
         {/* Main brand title */}
         <div className="inline-block relative mb-2">
           <h2 className="text-3xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-monad-ice via-monad-purple to-yellow-400 drop-shadow-[4px_4px_0_rgba(0,0,0,1)] leading-tight">
-            PopMON&nbsp;<span style={{ WebkitTextFillColor: '#F59E0B', fontSize: '1.15em' }}>泡姆</span>
+            PopMON&nbsp;<span style={{ WebkitTextFillColor: '#F59E0B', fontSize: '1.15em', position: 'relative', top: '-10px' }}>泡姆</span>
           </h2>
           <div className="absolute -top-2 -right-4 w-4 h-4 bg-yellow-400 animate-blink" />
         </div>
